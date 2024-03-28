@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <!--
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.form.io/formiojs/formio.full.min.css">
+    <script src="https://cdn.form.io/formiojs/formio.full.min.js"></script>
+    <script type="text/javascript">
+      window.onload = function() {
+        Formio.icons = 'fontawesome';
+        // Formio.builder(document.getElementById('builder'));
+        Formio.builder(document.getElementById('builder'), {},
+        {
+          builder: {
+            basic: {
+              title: 'Basic',
+              weight: 0,
+              default: true,
+            },
+            advanced: {
+              title: 'Advanced',
+              weight: 10
+            },
+            layout: {
+              title: 'Layout',
+              weight: 20
+            },
+            data: {
+              title: 'Data',
+              weight: 30
+            },
+            premium: {
+              title: 'Premium',
+              weight: 40
+            }
+          }
+      });
+      };
+    </script>
+  </head>
+  <body>
+    <div>test builder</div>
+    <div id="builder"></div>
+  </body>
+</html>

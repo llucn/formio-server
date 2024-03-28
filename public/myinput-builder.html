@@ -1,0 +1,102 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <!--
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.form.io/formiojs/formio.full.min.css">
+    <script src="https://cdn.form.io/formiojs/formio.full.min.js"></script>
+    <script src="./javascripts/myinput.js"></script>
+    <script type="text/javascript">
+      var objBuilder = null;
+      var objForm = null;
+
+      window.onload = function() {
+
+        Formio.use({
+          components: {
+            myInput: MyInput
+          }
+        });
+
+        Formio.icons = 'fontawesome';
+
+        Formio.builder(document.getElementById('builder'), {}, {
+            builder: {
+                workorder: {
+                    title: 'WO Fields',
+                    weight: 0,
+                    default: true,
+                    components: {
+                        wonum: {
+                            title: 'WONUM',
+                            key: 'wonum',
+                            icon: 'terminal',
+                            schema: {
+                                label: 'WONUM',
+                                type: 'textfield',
+                                key: 'wonum',
+                                input: true,
+                                disabled: false
+                            }
+                        },
+                        myinput: {
+                            title: 'My Input',
+                            key: 'myinput',
+                            icon: 'terminal',
+                            schema: {
+                                label: 'My Input',
+                                type: 'textfield',
+                                key: 'myinput',
+                                input: true,
+                                disabled: false
+                            }
+                        }
+                    }
+                },
+                basic: {
+                  title: 'Basic',
+                  weight: 100,
+                  default: false
+                },
+                advanced: {
+                  title: 'Advanced',
+                  weight: 110
+                },
+                layout: {
+                  title: 'Layout',
+                  weight: 120
+                },
+                data: {
+                  title: 'Data',
+                  weight: 130
+                },
+                premium: {
+                  title: 'Premium',
+                  weight: 140
+                }
+            }
+        }).then((builder) => {
+          // Here is the form builder instance.
+          // console.log(builder.form);
+          objBuilder = builder;
+          objForm = builder.form;
+        });
+      };
+
+      function test() {
+        console.log(objForm);
+        console.log(objForm.components);
+        console.log(JSON.stringify(objForm.components));
+      }
+    </script>
+  </head>
+  <body>
+    <div><button onclick="test()">Test</button></div>
+    <div id="builder"></div>
+  </body>
+</html>
