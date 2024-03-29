@@ -1,3 +1,4 @@
+var createError = require('http-errors');
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
@@ -7,6 +8,7 @@ router.get('/form', function(req, res, next) {
     const content = fs.readFileSync('./.form.json', 'utf8');
     res.json(JSON.parse(content));
   } catch (err) {
+    next(createError(500));
     res.render('error', { message: err.message, error: err });
   }
 });
@@ -27,6 +29,7 @@ router.get('/form-data', function(req, res, next) {
     const content = fs.readFileSync('./.form-data.json', 'utf8');
     res.json(JSON.parse(content));
   } catch (err) {
+    next(createError(500));
     res.render('error', { message: err.message, error: err });
   }
 });
