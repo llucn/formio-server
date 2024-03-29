@@ -96,7 +96,7 @@
         });
       };
 
-      async function save() {
+      function save() {
         const request = new XMLHttpRequest();
         request.open("PUT", "/api/form", false);
         request.setRequestHeader('Content-type', 'application/json');
