@@ -25,76 +25,47 @@
 
         Formio.icons = 'fontawesome';
         // Formio.createForm(document.getElementById('formio'), 'https://examples.form.io/example');
+        let form = {};
+        const request = new XMLHttpRequest();
+        request.open("GET", "/api/form", false);
+        request.send(null);
+        if (request.status === 200) {
+          form = JSON.parse(request.responseText);
+        }
 
-        Formio.createForm(document.getElementById('formio'), {
-          components: [
-            {
-              type: 'myInput',
-              key: 'myInput',
-              label: 'My Input'
-            },
-            {
-              type: 'textfield',
-              key: 'firstName',
-              label: 'First Name'
-            },
-            {
-              type: 'textfield',
-              key: 'lastName',
-              label: 'Last Name'
-            },
-            {
-              type: 'email',
-              key: 'email',
-              label: 'Email'
-            },
-            {
-              label: "Select",
-              widget: "choicesjs",
-              tableView: true,
-              data: {
-                values: [
-                  {
-                    label: "a",
-                    value: "aa"
-                  },
-                  {
-                    label: "b",
-                    value: "bb"
-                  }
-                ]
-              },
-              key: "select",
-              type: "select",
-              input: true,
-              defaultValue: "aa"
-            },
-            {
-              type: 'button',
-              key: 'submit',
-              label: 'Submit'
-            }
-          ]
-        }).then((form) => {
+        let formData = {};
+        const dataRequest = new XMLHttpRequest();
+        dataRequest.open("GET", "/api/form-data", false);
+        dataRequest.send(null);
+        if (dataRequest.status === 200) {
+          formData = JSON.parse(dataRequest.responseText);
+          console.table([formData]);
+        }
+
+        Formio.createForm(document.getElementById('formio'), form).then((form) => {
           objForm = form;
-          // form.submission = {
-          //   data: {
-
-          //   }
-          // };
+          form.submission = {
+            data: formData
+          };
         });
       };
 
-      function test() {
-        console.log(objForm);
-        console.log('form: ', objForm.form);
-        console.log('schema: ', objForm.schema);
-        console.log(JSON.stringify(objForm.schema));
+      function save() {
+        const request = new XMLHttpRequest();
+        request.open("PUT", "/api/form-data", false);
+        request.setRequestHeader('Content-type', 'application/json');
+        request.send(JSON.stringify(objForm.data));
+        if (request.status === 200) {
+          const ret = request.responseText;
+          console.table(ret);
+        } else {
+          console.log('error');
+        }
       }
     </script>
   </head>
   <body>
-    <div><button onclick="test()">Test</button></div>
+    <div><button onclick="save()">Save</button></div>
     <div id="formio"></div>
   </body>
 </html>
