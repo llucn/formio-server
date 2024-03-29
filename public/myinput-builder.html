@@ -24,8 +24,16 @@
         });
 
         Formio.icons = 'fontawesome';
+        let form = {};
+        const request = new XMLHttpRequest();
+        request.open("GET", "/api/form", false);
+        request.send(null);
+        if (request.status === 200) {
+          form = JSON.parse(request.responseText);
+          console.table([form]);
+        }
 
-        Formio.builder(document.getElementById('builder'), {}, {
+        Formio.builder(document.getElementById('builder'), form, {
             builder: {
                 workorder: {
                     title: 'WO Fields',
@@ -88,15 +96,22 @@
         });
       };
 
-      function test() {
-        console.log(objForm);
-        console.log(objForm.components);
-        console.log(JSON.stringify(objForm.components));
+      function save() {
+        const request = new XMLHttpRequest();
+        request.open("PUT", "/api/form", false);
+        request.setRequestHeader('Content-type', 'application/json');
+        request.send(JSON.stringify(objForm));
+        if (request.status === 200) {
+          const ret = request.responseText;
+          console.table(ret);
+        } else {
+          console.log('error');
+        }
       }
     </script>
   </head>
   <body>
-    <div><button onclick="test()">Test</button></div>
+    <div><button onclick="save()">Save</button></div>
     <div id="builder"></div>
   </body>
 </html>
