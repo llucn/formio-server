@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const path = require('path');
 const puppeteer = require('puppeteer');
+var fs = require('fs');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -50,6 +51,26 @@ router.get('/pdf2', function(req, res, next) {
 
     res.render('index', { title: 'download' });
   })();
+});
+
+router.get('/api/form', function(req, res, next) {
+  try {
+    const content = fs.readFileSync('./.form.json', 'utf8');
+    res.json(JSON.parse(content));
+  } catch (err) {
+    res.render('error', { message: err.message, error: err });
+  }
+});
+
+router.put('/api/form', function(req, res, next) {
+  const content = JSON.stringify(req.body);
+  fs.writeFile('./.form.json', content, err => {
+    if (err) {
+      res.render('error', { message: err.message, error: err });
+    } else {
+      res.json({ok: true});
+    }
+  });
 });
 
 module.exports = router;
