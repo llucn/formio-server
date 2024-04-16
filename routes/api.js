@@ -3,46 +3,54 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 
-router.get('/form', function(req, res, next) {
-  try {
-    const content = fs.readFileSync('./.form.json', 'utf8');
-    res.json(JSON.parse(content));
-  } catch (err) {
-    next(createError(500));
-    res.render('error', { message: err.message, error: err });
+router.get('/res/:name', function(req, res, next) {
+  const name = req.params.name;
+  const path = './.res/' + name;
+  const exists = fs.existsSync(path);
+
+  if (exists) {
+    try {
+      const content = fs.readFileSync(path, 'utf8');
+      res.json(JSON.parse(content));
+    } catch (err) {
+      next(createError(500));
+    }
+  } else {
+    next(createError(404));
   }
 });
+
+router.put('/res/:name', function(req, res, next) {
+  const name = req.params.name;
+  const path = './.res/' + name;
+  const content = JSON.stringify(req.body);
+
+  try {
+    const exists = fs.existsSync('./.res');
+    if (!exists) {
+      fs.mkdirSync('./.res');
+    }
+
+    fs.writeFileSync(path, content);
+    res.json({ ok: true });
+  } catch (err) {
+    next(createError(500));
+  }
+});
+
+router.delete('/res/:name', function(req, res, next) {
+  const name = req.params.name;
+  const path = './.res/' + name;
+  const exists = fs.existsSync(path);
   
-router.put('/form', function(req, res, next) {
-  const content = JSON.stringify(req.body);
-  fs.writeFile('./.form.json', content, err => {
-    if (err) {
-      res.render('error', { message: err.message, error: err });
-    } else {
-      res.json({ok: true});
-    }
-  });
-});
-
-router.get('/form-data', function(req, res, next) {
   try {
-    const content = fs.readFileSync('./.form-data.json', 'utf8');
-    res.json(JSON.parse(content));
+    if (exists) {
+      fs.rmSync(path);
+    }
+    res.json({ok: true});
   } catch (err) {
     next(createError(500));
-    res.render('error', { message: err.message, error: err });
   }
-});
-
-router.put('/form-data', function(req, res, next) {
-  const content = JSON.stringify(req.body);
-  fs.writeFile('./.form-data.json', content, err => {
-    if (err) {
-      res.render('error', { message: err.message, error: err });
-    } else {
-      res.json({ok: true});
-    }
-  });
 });
 
 module.exports = router;

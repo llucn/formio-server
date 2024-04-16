@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://cdn.form.io/formiojs/formio.full.min.css">
     <script src="https://cdn.form.io/formiojs/formio.full.min.js"></script>
     <script src="./javascripts/myinput.js"></script>
-
     <script type="text/javascript">
       var objForm = null;
 
@@ -25,24 +24,60 @@
 
         Formio.icons = 'fontawesome';
         // Formio.createForm(document.getElementById('formio'), 'https://examples.form.io/example');
-        let form = {};
-        const request = new XMLHttpRequest();
-        request.open("GET", "/api/res/myinput-form", false);
-        request.send(null);
-        if (request.status === 200) {
-          form = JSON.parse(request.responseText);
-        }
+        let form = {
+          components: [
+            {
+              label: "Form List",
+              labelPosition: "top",
+              addAnotherPosition: "bottom",
+              clearOnHide: true,
+              validateOn: "change",
+              key: "formList",
+              type: "datagrid",
+              input: true,
+              tree: true,
+              components: [
+                {
+                  label: "Name",
+                  labelPosition: "top",
+                  widget: {
+                    type: "input"
+                  },
+                  applyMaskOn: "change",
+                  inputFormat: "plain",
+                  validateOn: "change",
+                  key: "name",
+                  type: "textfield",
+                  input: true,
+                  inputType: "text",
+                  id: "eaevr4l",
+                },
+                {
+                  label: "Operation",
+                  tag: "p",
+                  content: "<a href=\"/form/builder/{{row.name}}\" target=\"_blank\">Builder</a> <a href=\"/form/submission/{{row.name}}\" target=\"_blank\">Submission</a> <a href=\"/form/view/{{row.name}}\" target=\"_blank\">View</a>",
+                  refreshOnChange: true,
+                  key: "operation",
+                  type: "htmlelement",
+                  labelPosition: "top",
+                  validateOn: "change",
+                  id: "e925sp",
+                },
+              ],
+              id: "e9g4lyj",
+            },
+          ]
+        };
 
         let formData = {};
         const dataRequest = new XMLHttpRequest();
-        dataRequest.open("GET", "/api/res/myinput-data", false);
+        dataRequest.open("GET", "/api/res/_forms", false);
         dataRequest.send(null);
         if (dataRequest.status === 200) {
           formData = JSON.parse(dataRequest.responseText);
-          console.table([formData]);
         }
 
-        Formio.createForm(document.getElementById('formio'), form).then((form) => {
+        Formio.createForm(document.getElementById('formio'), form, {}).then((form) => {
           objForm = form;
           form.submission = {
             data: formData
@@ -52,12 +87,11 @@
 
       function save() {
         const request = new XMLHttpRequest();
-        request.open("PUT", "/api/res/myinput-data", false);
+        request.open("PUT", "/api/res/_forms", false);
         request.setRequestHeader('Content-type', 'application/json');
         request.send(JSON.stringify(objForm.data));
         if (request.status === 200) {
           const ret = request.responseText;
-          console.table(ret);
         } else {
           console.log('error');
         }

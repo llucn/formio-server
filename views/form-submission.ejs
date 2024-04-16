@@ -1,0 +1,75 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <!--
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.form.io/formiojs/formio.full.min.css">
+    <script src="https://cdn.form.io/formiojs/formio.full.min.js"></script>
+    <script src="../../javascripts/myinput.js"></script>
+
+    <script type="text/javascript">
+      var objForm = null;
+      var res = ["_form_builder_<%= name %>", "_form_submission_<%= name %>"];
+
+      window.onload = function() {
+        
+        Formio.use({
+          components: {
+            myInput: MyInput
+          }
+        });
+
+        Formio.icons = 'fontawesome';
+        // Formio.createForm(document.getElementById('formio'), 'https://examples.form.io/example');
+        let form = {};
+        const request = new XMLHttpRequest();
+        request.open("GET", "/api/res/" + res[0], false);
+        request.send(null);
+        if (request.status === 200) {
+          form = JSON.parse(request.responseText);
+        }
+
+        let formData = {};
+        const dataRequest = new XMLHttpRequest();
+        dataRequest.open("GET", "/api/res/" + res[1], false);
+        dataRequest.send(null);
+        if (dataRequest.status === 200) {
+          formData = JSON.parse(dataRequest.responseText);
+          console.table([formData]);
+        }
+
+        Formio.createForm(document.getElementById('formio'), form, {
+          readOnly: false,
+          renderMode: 'form',
+        }).then((form) => {
+          objForm = form;
+          form.submission = {
+            data: formData
+          };
+        });
+      };
+
+      function save() {
+        const request = new XMLHttpRequest();
+        request.open("PUT", "/api/res/" + res[1], false);
+        request.setRequestHeader('Content-type', 'application/json');
+        request.send(JSON.stringify(objForm.data));
+        if (request.status === 200) {
+          const ret = request.responseText;
+          console.table(ret);
+        } else {
+          console.log('error');
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="formio"></div>
+    <div><button onclick="save()">Save</button></div>
+  </body>
+</html>
