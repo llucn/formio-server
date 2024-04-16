@@ -71,7 +71,7 @@
 
         let formData = {};
         const dataRequest = new XMLHttpRequest();
-        dataRequest.open("GET", "/api/res/myinput-data", false);
+        dataRequest.open("GET", "/api/res/_forms", false);
         dataRequest.send(null);
         if (dataRequest.status === 200) {
           formData = JSON.parse(dataRequest.responseText);
@@ -87,7 +87,7 @@
 
       function save() {
         const request = new XMLHttpRequest();
-        request.open("PUT", "/api/res/myinput-data", false);
+        request.open("PUT", "/api/res/_forms", false);
         request.setRequestHeader('Content-type', 'application/json');
         request.send(JSON.stringify(objForm.data));
         if (request.status === 200) {
