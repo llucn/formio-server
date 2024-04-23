@@ -11,7 +11,9 @@
     <link rel="stylesheet" href="https://cdn.form.io/formiojs/formio.full.min.css">
     <script src="https://cdn.form.io/formiojs/formio.full.min.js"></script>
     <script src="../../javascripts/myinput.js"></script>
-
+    <script src="../../javascripts/header.js"></script>
+    <script src="../../javascripts/location.js"></script>
+    <script src="../../javascripts/checkmatrix.js"></script>
     <script type="text/javascript">
       var objForm = null;
       var res = ["_form_builder_<%= name %>", "_form_submission_<%= name %>"];
@@ -20,7 +22,10 @@
         
         Formio.use({
           components: {
-            myInput: MyInput
+            myInput: MyInput,
+            header: HeaderComponent,
+            location: LocationComponent,
+            checkmatrix: CheckMatrixComponent,
           }
         });
 

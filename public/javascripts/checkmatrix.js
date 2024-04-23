@@ -61,8 +61,6 @@ class CheckMatrixComponent extends FieldComponent {
       table += '</tr>';
     }
     table += '</tbody></table>';
-    //console.log('render table', table);
-    //const html = `<div ref="ref_${this.component.key}">Metrics ${this.component.numRows} x ${this.component.numCols}</div>`;
     return super.render(table);
   }
 
@@ -102,7 +100,6 @@ class CheckMatrixComponent extends FieldComponent {
   }
 
   setValue(value) {
-    console.log('checkmatrix setValue', value);
     if (!value) {
       return;
     }
@@ -117,7 +114,6 @@ class CheckMatrixComponent extends FieldComponent {
         //  return false;
         //}
         let checked = value[rowIndex][colIndex] ? 1 : 0;
-        //console.log('value[rowIndex][colIndex]', value[rowIndex][colIndex]);
         col.value = checked;
         col.checked = checked;
       }
@@ -127,5 +123,39 @@ class CheckMatrixComponent extends FieldComponent {
 
 CheckMatrixComponent.editForm = (...args) => {
   const editForm = FieldComponent.editForm(...args);
-  return editForm;
+  return {
+    components: [
+      {
+        key: "mainTabs",
+        type: "tabs",
+        components: [
+          {
+            key: "cmprops",
+            label: "Check Matrix Properties",
+            weight: 0,
+            components: [
+              {
+                type: 'number',
+                key: 'numRows',
+                label: 'Rows',
+              },
+              {
+                type: 'number',
+                key: 'numCols',
+                label: 'Columns',
+              }
+            ]
+          },
+          {
+            key: "fieldprops",
+            label: "Field Properties",
+            weight: 10,
+            components: [
+              ...editForm.components
+            ],
+          }
+        ]
+      }
+    ],
+  };
 };
