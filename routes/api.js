@@ -4,6 +4,9 @@ var router = express.Router();
 var fs = require('fs');
 
 router.get('/res/:name', function(req, res, next) {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'HEAD, GET, POST, PATCH, PUT, DELETE, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
   const name = req.params.name;
   const path = './.res/' + name;
   const exists = fs.existsSync(path);
@@ -21,6 +24,9 @@ router.get('/res/:name', function(req, res, next) {
 });
 
 router.put('/res/:name', function(req, res, next) {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'HEAD, GET, POST, PATCH, PUT, DELETE, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
   const name = req.params.name;
   const path = './.res/' + name;
   const content = JSON.stringify(req.body);
@@ -39,6 +45,9 @@ router.put('/res/:name', function(req, res, next) {
 });
 
 router.delete('/res/:name', function(req, res, next) {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'HEAD, GET, POST, PATCH, PUT, DELETE, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
   const name = req.params.name;
   const path = './.res/' + name;
   const exists = fs.existsSync(path);
@@ -51,6 +60,13 @@ router.delete('/res/:name', function(req, res, next) {
   } catch (err) {
     next(createError(500));
   }
+});
+
+router.options('/res/:name', function(req, res, next) {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'HEAD, GET, POST, PATCH, PUT, DELETE, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
+  res.status(200).send();
 });
 
 module.exports = router;
